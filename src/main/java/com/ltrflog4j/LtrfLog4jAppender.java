@@ -4,6 +4,9 @@ import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Layout;
 import org.apache.log4j.spi.LoggingEvent;
 
+import com.ltrf.LogClient;
+import com.ltrf.LogMessage;
+
 public class LtrfLog4jAppender extends AppenderSkeleton {
 	
 	
@@ -15,6 +18,16 @@ public class LtrfLog4jAppender extends AppenderSkeleton {
 	private String appName;
 	private String keys;
 	private String additionalInfo;
+	private String uri;
+	public String getUri() {
+		return uri;
+	}
+
+	public void setUri(String uri) {
+		this.uri = uri;
+		LogClient.setURI(uri);
+	}
+
 	private static String[] keyStrings;
 
 	public String getAppName() {
@@ -84,8 +97,18 @@ public class LtrfLog4jAppender extends AppenderSkeleton {
 	}
 
 	private void trackMessage(String key, String message) {
-		System.out.println(key);
-		System.out.println(message);		
+		try{
+			LogMessage logMessage = new LogMessage();
+			logMessage.setAppName(appName);
+			logMessage.setKey(key);
+			logMessage.setAdditionalDetails(additionalInfo);
+			logMessage.setMessage(message);
+			LogClient.trackMessage(logMessage);
+		}catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		
 	}
 
 	private String trackable(String message) {
