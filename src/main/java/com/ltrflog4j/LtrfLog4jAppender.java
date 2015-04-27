@@ -89,8 +89,8 @@ public class LtrfLog4jAppender extends AppenderSkeleton {
 				}
 			}
 		}
-		String key;
-		if((key = trackable(message.toString())) != null )
+		String key = trackable(message.toString());
+		if(key != null )
 		{
 			trackMessage(key,message.toString());
 		}
@@ -114,8 +114,10 @@ public class LtrfLog4jAppender extends AppenderSkeleton {
 	private String trackable(String message) {
 		for(String key : keyStrings)
 		{
-			if(message.contains(key));
+			if(message.contains(key))
+			{
 				return key;
+			}				
 		}
 		return null;
 	}
